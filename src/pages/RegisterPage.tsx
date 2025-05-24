@@ -7,6 +7,7 @@ import InputField from '../components/auth/InputField';
 import AuthButton from '../components/auth/AuthButton';
 import BackButton from '../components/BackButton';
 import { useNavigate } from 'react-router-dom';
+import { register } from '../services/authService';
 
 const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -36,12 +37,15 @@ const RegisterPage: React.FC = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (!validateForm()) return;
 
-        // to do
-        console.log('Email:', email);
-        console.log('Password:', password);
+        try {
+            await register(email, password);
+            navigate('/login');
+        } catch (error: any) {
+            setErrors({ general: error.message || 'Registration failed' });
+        }
     };
 
     const handleNavigateBack = () => {
