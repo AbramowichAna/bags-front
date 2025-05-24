@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (token && !['/auth/login', '/auth/register'].includes(config.url || '')) {
             if (!config.headers) {
                 config.headers = new AxiosHeaders();
             }

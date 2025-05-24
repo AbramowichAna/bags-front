@@ -44,7 +44,11 @@ const RegisterPage: React.FC = () => {
             await register(email, password);
             navigate('/login');
         } catch (error: any) {
-            setErrors({ general: error.message || 'Registration failed' });
+            if (error.response?.data?.message) {
+                setErrors({general: error.response.data.message});
+            } else {
+                setErrors({general: 'Registration failed'});
+            }
         }
     };
 
@@ -114,6 +118,11 @@ const RegisterPage: React.FC = () => {
                     />
                     <Box sx={{ mt: 3, mb: 2 }}>
                         <AuthButton label="Sign up" onClick={handleRegister} />
+                        {errors.general && (
+                            <Typography color="error" sx={{ mt: 2 }} role="alert">
+                                {errors.general}
+                            </Typography>
+                        )}
                     </Box>
                     <Typography variant="body2" align="center">
                         Already have an account?{' '}

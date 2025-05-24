@@ -17,6 +17,10 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = async () => {
         setError('');
+        if (!email || !password) {
+            setError('Email and password are required');
+            return;
+        }
         try {
             await login(email, password);
             navigate('/home');
