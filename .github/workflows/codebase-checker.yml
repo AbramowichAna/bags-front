@@ -28,9 +28,22 @@ jobs:
       - name: Run lint
         run: npm run lint
 
+      - name: Start backend container
+        run: |
+          docker pull ghcr.io/abramowichana/bags:latest
+          docker run -d -p 3001:3001 --name backend ghcr.io/abramowichana/bags:latest
+
+      - name: Wait for backend to be ready
+        run: |
+          n=0
+          until curl -s http://localhost:3001/health || [ $n -ge 10 ]; do
+            echo "Waiting for backend..."
+            n=$((n+1))
+            sleep 5
+          done
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           build: npm run build
           start: npm start
-
