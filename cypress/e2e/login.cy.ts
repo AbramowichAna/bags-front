@@ -6,9 +6,23 @@ describe('Login flow', () => {
     });
 
     it('should allow a user to log in successfully', () => {
+        cy.intercept('POST', '/auth/login', {
+            statusCode: 200,
+            body: {
+                token: 'fake-jwt-token',
+                user: {
+                    id: 1,
+                    email: 'aniabramowich2003@gmail.com',
+                    name: 'Anita',
+                },
+            },
+        }).as('loginRequest');
+
         cy.get('input#email').type('aniabramowich2003@gmail.com');
         cy.get('input#password').type('australwbl');
         cy.get('button').contains('Sign in').click();
+
+        cy.wait('@loginRequest');
         cy.url().should('include', '/home');
     });
 

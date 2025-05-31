@@ -35,28 +35,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull and start backend container
-        run: |
-          docker pull ghcr.io/abramowichana/bags:0.0.1
-          docker run -d -p 3001:3001 --name backend ghcr.io/abramowichana/bags:0.0.1
-
-      - name: Wait for backend to be ready
-        run: |
-          for i in {1..30}; do
-            if curl --silent --fail http://localhost:3001/health; then
-              echo "Backend is up!"
-              break
-            fi
-            echo "Waiting for backend..."
-            sleep 2
-          done
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           build: npm run build
           start: npm start
-
-      - name: Stop backend container
-        if: always()
-        run: docker stop backend && docker rm backend
