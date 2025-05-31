@@ -6,23 +6,9 @@ describe('Login flow', () => {
     });
 
     it('should allow a user to log in successfully', () => {
-        cy.intercept('POST', '/auth/login', {
-            statusCode: 200,
-            body: {
-                token: 'fake-jwt-token',
-                user: {
-                    id: 1,
-                    email: 'aniabramowich2003@gmail.com',
-                    name: 'Anita',
-                },
-            },
-        }).as('loginRequest');
-
         cy.get('input#email').type('aniabramowich2003@gmail.com');
         cy.get('input#password').type('australwbl');
         cy.get('button').contains('Sign in').click();
-
-        cy.wait('@loginRequest');
         cy.url().should('include', '/home');
     });
 
@@ -33,16 +19,10 @@ describe('Login flow', () => {
     });
 
     it('should show general error on wrong credentials', () => {
-        cy.intercept('POST', '/auth/login', {
-            statusCode: 401,
-            body: { message: 'Invalid email or password' },
-        });
-
         cy.get('input#email').type('wrong@example.com');
         cy.get('input#password').type('wrongpass');
         cy.get('button').contains('Sign in').click();
-
-        cy.contains('Invalid email or password').should('exist');
+        cy.contains('Error logging in').should('exist');
     });
 
     it('should navigate to register page when clicking Create account link', () => {

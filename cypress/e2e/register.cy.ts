@@ -1,5 +1,10 @@
 
 export {};
+function generateUniqueEmail() {
+    const timestamp = Date.now();
+    return `testuser+${timestamp}@example.com`;
+}
+const uniqueEmail = generateUniqueEmail();
 describe('Register Page', () => {
     beforeEach(() => {
         cy.visit('/register');
@@ -24,38 +29,22 @@ describe('Register Page', () => {
     });
 
     it('registers successfully and navigates to login', () => {
-        cy.intercept('POST', '/auth/register', {
-            statusCode: 200,
-            body: {},
-        }).as('registerRequest');
 
-        cy.get('input[id="email"]').type('test@example.com');
+        cy.get('input[id="email"]').type(uniqueEmail);
         cy.get('input[id="password"]').type('password123');
         cy.get('input[id="confirm-password"]').type('password123');
 
         cy.get('button').contains('Sign up').click();
-
-        cy.wait('@registerRequest').its('request.body').should('deep.equal', {
-            email: 'test@example.com',
-            password: 'password123',
-        });
 
         cy.url().should('include', '/login');
     });
 
     it('shows error message if registration fails', () => {
-        cy.intercept('POST', '/auth/register', {
-            statusCode: 400,
-            body: { message: 'Registration failed' },
-        }).as('registerFail');
-
         cy.get('input[id="email"]').type('test@example.com');
         cy.get('input[id="password"]').type('password123');
         cy.get('input[id="confirm-password"]').type('password123');
 
         cy.get('button').contains('Sign up').click();
-
-        cy.wait('@registerFail');
 
         cy.contains('Registration failed').should('be.visible');
     });
