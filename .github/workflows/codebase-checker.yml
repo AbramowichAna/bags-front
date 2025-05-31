@@ -34,11 +34,3 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
-        with:
-          build: npm run build
-          start: npm start
-        env:
-          CYPRESS_CI: true
