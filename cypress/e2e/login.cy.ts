@@ -7,6 +7,7 @@ describe('Login flow', () => {
 
     it('should allow a user to log in successfully', () => {
         if (Cypress.env('CI') === 'true') {
+            cy.log('Mocking /auth/login');
             cy.intercept('POST', '/auth/login', {
                 statusCode: 200,
                 body: {
