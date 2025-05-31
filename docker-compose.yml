@@ -1,0 +1,6 @@
+version: "3"
+services:
+  frontend:
+    image: bags-front
+    ports:
+      - "${APP_PORT}:80"

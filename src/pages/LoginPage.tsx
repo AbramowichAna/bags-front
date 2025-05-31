@@ -87,7 +87,7 @@ const LoginPage: React.FC = () => {
                 </Typography>
             )}
           <Typography variant="body2" align="center">
-            Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
             <Link component="button" variant="body2" onClick={handleCreateAccount} sx={{ fontWeight: 'bold', textDecoration: 'none', top: '-2px' }}>
               Create account
             </Link>
