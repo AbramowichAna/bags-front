@@ -6,8 +6,7 @@ describe('Login flow', () => {
     });
 
     it('should allow a user to log in successfully', () => {
-        if (Cypress.env('CI') === 'true') {
-            cy.log('Mocking /auth/login');
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.intercept('POST', '/auth/login', {
                 statusCode: 200,
                 body: {
@@ -25,7 +24,7 @@ describe('Login flow', () => {
         cy.get('input#password').type('australwbl');
         cy.get('button').contains('Sign in').click();
 
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.wait('@loginRequest');
         }
 
@@ -39,7 +38,7 @@ describe('Login flow', () => {
     });
 
     it('should show general error on wrong credentials', () => {
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.intercept('POST', '/auth/login', {
                 statusCode: 401,
                 body: { message: 'Invalid email or password' },
@@ -50,7 +49,7 @@ describe('Login flow', () => {
         cy.get('input#password').type('wrongpass');
         cy.get('button').contains('Sign in').click();
 
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.wait('@loginRequestFail');
         }
 

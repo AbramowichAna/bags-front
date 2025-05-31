@@ -30,7 +30,7 @@ describe('Register Page', () => {
 
     it('registers successfully and navigates to login', () => {
 
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.intercept('POST', '/auth/register', {
                 statusCode: 200,
                 body: {},
@@ -43,7 +43,7 @@ describe('Register Page', () => {
 
         cy.get('button').contains('Sign up').click();
 
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.wait('@registerRequest').its('request.body').should('deep.equal', {
                 email: uniqueEmail,
                 password: 'password123',
@@ -54,7 +54,7 @@ describe('Register Page', () => {
     });
 
     it('shows error message if registration fails', () => {
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.intercept('POST', '/auth/register', {
                 statusCode: 400,
                 body: { message: 'Registration failed' },
@@ -67,7 +67,7 @@ describe('Register Page', () => {
 
         cy.get('button').contains('Sign up').click();
 
-        if (Cypress.env('CI') === 'true') {
+        if (Cypress.env('CYPRESS_CI') === 'true') {
             cy.wait('@registerFail');
             cy.contains('Registration failed').should('be.visible');
         } else {
