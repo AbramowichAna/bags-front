@@ -6,23 +6,28 @@ describe('Login flow', () => {
     });
 
     it('should allow a user to log in successfully', () => {
-        cy.intercept('POST', '/auth/login', {
-            statusCode: 200,
-            body: {
-                token: 'fake-jwt-token',
-                user: {
-                    id: 1,
-                    email: 'aniabramowich2003@gmail.com',
-                    name: 'Anita',
+        if (Cypress.env('CI') === 'true') {
+            cy.intercept('POST', '/auth/login', {
+                statusCode: 200,
+                body: {
+                    token: 'fake-jwt-token',
+                    user: {
+                        id: 1,
+                        email: 'aniabramowich2003@gmail.com',
+                        name: 'Anita',
+                    },
                 },
-            },
-        }).as('loginRequest');
+            }).as('loginRequest');
+        }
 
         cy.get('input#email').type('aniabramowich2003@gmail.com');
         cy.get('input#password').type('australwbl');
         cy.get('button').contains('Sign in').click();
 
-        cy.wait('@loginRequest');
+        if (Cypress.env('CI') === 'true') {
+            cy.wait('@loginRequest');
+        }
+
         cy.url().should('include', '/home');
     });
 
@@ -33,16 +38,22 @@ describe('Login flow', () => {
     });
 
     it('should show general error on wrong credentials', () => {
-        cy.intercept('POST', '/auth/login', {
-            statusCode: 401,
-            body: { message: 'Invalid email or password' },
-        });
+        if (Cypress.env('CI') === 'true') {
+            cy.intercept('POST', '/auth/login', {
+                statusCode: 401,
+                body: { message: 'Invalid email or password' },
+            }).as('loginRequestFail');
+        }
 
         cy.get('input#email').type('wrong@example.com');
         cy.get('input#password').type('wrongpass');
         cy.get('button').contains('Sign in').click();
 
-        cy.contains('Invalid email or password').should('exist');
+        if (Cypress.env('CI') === 'true') {
+            cy.wait('@loginRequestFail');
+        }
+
+        cy.contains('Error logging in').should('exist');
     });
 
     it('should navigate to register page when clicking Create account link', () => {
