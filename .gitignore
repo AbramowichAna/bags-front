@@ -26,3 +26,6 @@ yarn-error.log*
 /other
 
 .idea
+
+*.log
+*.tmp
