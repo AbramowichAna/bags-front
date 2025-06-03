@@ -6,8 +6,11 @@ export const config: WebdriverIO.Config = {
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
     tsConfigPath: './tsconfig.json',
-    
+    protocol: 'http',
+
+    hostname: 'localhost',
     port: 4723,
+    path: '/wd/hub',
     //
     // ==================
     // Specify Test Files
@@ -57,8 +60,8 @@ export const config: WebdriverIO.Config = {
         platformName: 'Android',
         browserName: 'Chrome',
         'appium:deviceName': 'Android GoogleAPI Emulator',
-        'appium:platformVersion': '12.0',
-        'appium:automationName': 'UiAutomator2'
+        'appium:platformVersion': '16',
+        'appium:automationName': 'UiAutomator2',
     }],
 
     //
@@ -108,7 +111,7 @@ export const config: WebdriverIO.Config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['appium'],
+    services: [],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
