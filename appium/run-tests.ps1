@@ -8,4 +8,4 @@ Get-Content .env | ForEach-Object {
 }
 
 # Ejecutar los tests
-npx wdio run wdio.conf.ts --spec ./test/specs/open-google.e2e.ts
+npx wdio run wdio.conf.ts --spec ./test/specs/landing.e2e.ts
