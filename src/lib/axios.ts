@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosHeaders } from 'axios';
+import axios, {InternalAxiosRequestConfig, AxiosResponse, AxiosHeaders, AxiosRequestConfig} from 'axios';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080',
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
 
 export async function get<T>(
     url: string,
-    config?: InternalAxiosRequestConfig
+    config?: AxiosRequestConfig
 ): Promise<AxiosResponse<T>> {
     return axiosInstance.get<T>(url, config);
 }
