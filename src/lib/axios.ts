@@ -31,7 +31,7 @@ export async function get<T>(
 export async function post<T, U>(
     url: string,
     data: U,
-    config?: InternalAxiosRequestConfig
+    config?: AxiosRequestConfig
 ): Promise<AxiosResponse<T>> {
     return axiosInstance.post<T>(url, data, config);
 }
