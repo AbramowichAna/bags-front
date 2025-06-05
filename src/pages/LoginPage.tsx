@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
         }
         try {
             await login(email, password);
-            navigate('/home');
+            navigate('/wallet')
         } catch (err: any) {
             setError(err.response?.data?.message || 'Error logging in');
         }

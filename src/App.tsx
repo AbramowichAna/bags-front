@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import SendPage from './pages/SendPage';
 import AddPage from './pages/AddPage';
+import WalletPage from "./pages/WalletPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/send" element={<SendPage />} />
         <Route path="/add" element={<AddPage />} />
+        <Route path="/wallet" element={<WalletPage />} />
       </Routes>
     </Router>
   );
