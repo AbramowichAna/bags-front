@@ -13,6 +13,7 @@ import {
     DialogActions
 } from '@mui/material';
 import TransferHistory from "../components/wallet/TransferHistory";
+import {ApiErrorResponse} from "../types/error";
 
 const WalletPage: React.FC = () => {
     const [walletInfo, setWalletInfo] = useState<WalletInfo | null>(null);
@@ -63,8 +64,10 @@ const WalletPage: React.FC = () => {
 
             const updatedInfo = await getWalletInfo();
             setWalletInfo(updatedInfo);
-        } catch (e) {
-            setFormError('Transfer failed. Please try again.');
+        } catch (e: any) {
+            if (e.response && e.response.data) {
+                setFormError((e.response.data as ApiErrorResponse).detail);
+            }
         }
     };
 

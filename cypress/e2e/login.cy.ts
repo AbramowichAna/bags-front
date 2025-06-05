@@ -9,7 +9,7 @@ describe('Login flow', () => {
         cy.get('input#email').type('aniabramowich2003@gmail.com');
         cy.get('input#password').type('australwbl');
         cy.get('button').contains('Sign in').click();
-        cy.url().should('include', '/home');
+        cy.url().should('include', '/wallet');
     });
 
     it('should show error when password is empty', () => {
