@@ -20,7 +20,7 @@ const TransferHistory: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const sizePerPage = 1;
+    const sizePerPage = 2;
 
     const fetchTransfers = async (pageNumber: number) => {
         setLoading(true);
