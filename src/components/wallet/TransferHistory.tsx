@@ -76,6 +76,8 @@ const TransferHistory: React.FC = () => {
                             <TableRow>
                                 <TableCell>From</TableCell>
                                 <TableCell>To</TableCell>
+                                <TableCell>Service Type</TableCell>
+                                <TableCell>Service Name</TableCell>
                                 <TableCell>Amount</TableCell>
                                 <TableCell>Direction</TableCell>
                                 <TableCell>Date</TableCell>
@@ -86,6 +88,8 @@ const TransferHistory: React.FC = () => {
                                 <TableRow key={t.id}>
                                     <TableCell>{t.fromParticipant.email}</TableCell>
                                     <TableCell>{t.toParticipant.email}</TableCell>
+                                    <TableCell>{t.fromParticipant.serviceType}</TableCell>
+                                    <TableCell>{t.fromParticipant.serviceName}</TableCell>
                                     <TableCell>$ {t.amount.toFixed(2)}</TableCell>
                                     <TableCell>{getDirectionLabel(t.type)}</TableCell>
                                     <TableCell>{new Date(t.timestamp).toLocaleString()}</TableCell>

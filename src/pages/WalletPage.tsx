@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import {getWalletInfo, requestDebIn, transfer, WalletInfo} from '../services/walletService';
 import {
     Box,
@@ -30,6 +31,8 @@ const WalletPage: React.FC = () => {
     const [debinRecipient, setDebinRecipient] = useState('');
     const [debinAmount, setDebinAmount] = useState('');
     const [debinFormError, setDebinFormError] = useState('');
+    const [debinServiceType, setDebinServiceType] = useState('');
+    const [debinServiceName, setDebinServiceName] = useState('');
 
 
     useEffect(() => {
@@ -85,8 +88,8 @@ const WalletPage: React.FC = () => {
 
         try {
             await requestDebIn({
-                externalServiceName: "Bank",
-                serviceType: "BANK",
+                externalServiceName: debinServiceName,
+                serviceType: debinServiceType,
                 externalEmail: debinRecipient,
                 amount: numericAmount,
             });
@@ -170,6 +173,24 @@ const WalletPage: React.FC = () => {
                         onChange={(e) => setDebinAmount(e.target.value)}
                         fullWidth
                         inputProps={{ min: 0, step: 0.01 }}
+                        sx={{ mt: 2 }}
+                    />
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                        <InputLabel id="service-type-label">Service Type</InputLabel>
+                        <Select
+                            labelId="service-type-label"
+                            value={debinServiceType}
+                            label="Service Type"
+                            onChange={(e) => setDebinServiceType(e.target.value)}
+                        >
+                            <MenuItem value="BANK">Bank</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField
+                        label="Service Name"
+                        value={debinServiceName}
+                        onChange={(e) => setDebinServiceName(e.target.value)}
+                        fullWidth
                         sx={{ mt: 2 }}
                     />
                     {debinFormError && <Alert severity="error" sx={{ mt: 2 }}>{debinFormError}</Alert>}

@@ -13,7 +13,8 @@ export interface TransferRequest {
 }
 
 export interface ParticipantDto {
-    name: string;
+    serviceType: string,
+    serviceName: string,
     email: string;
 }
 

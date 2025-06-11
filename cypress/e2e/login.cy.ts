@@ -6,14 +6,14 @@ describe('Login flow', () => {
     });
 
     it('should allow a user to log in successfully', () => {
-        cy.get('input#email').type('aniabramowich2003@gmail.com');
-        cy.get('input#password').type('australwbl');
+        cy.get('input#email').type('test@example.com');
+        cy.get('input#password').type('password');
         cy.get('button').contains('Sign in').click();
         cy.url().should('include', '/wallet');
     });
 
     it('should show error when password is empty', () => {
-        cy.get('input#email').type('aniabramowich2003@gmail.com');
+        cy.get('input#email').type('test@example.com');
         cy.get('button').contains('Sign in').click();
         cy.contains('Email and password are required').should('exist');
     });
