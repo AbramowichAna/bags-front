@@ -99,6 +99,9 @@ const WalletPage: React.FC = () => {
             setDebinRecipient('');
             setDebinAmount('');
             setDebinFormError('');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         } catch (e: any) {
             if (e.response && e.response.data) {
                 setDebinFormError((e.response.data as ApiErrorResponse).detail ?? e.response.data);
@@ -139,6 +142,7 @@ const WalletPage: React.FC = () => {
                             value={recipient}
                             onChange={(e) => setRecipient(e.target.value)}
                             fullWidth
+                            sx={{ mt: 2 }}
                         />
                         <TextField
                             label="Amount"
@@ -146,7 +150,7 @@ const WalletPage: React.FC = () => {
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             fullWidth
-                            inputProps={{ min: 0, step: 0.01 }}
+                            sx={{ mt: 2 }}
                         />
                         {formError && <Alert severity="error">{formError}</Alert>}
                 </DialogContent>
@@ -165,6 +169,7 @@ const WalletPage: React.FC = () => {
                         value={debinRecipient}
                         onChange={(e) => setDebinRecipient(e.target.value)}
                         fullWidth
+                        sx={{ mt: 2 }}
                     />
                     <TextField
                         label="Amount"
@@ -172,7 +177,6 @@ const WalletPage: React.FC = () => {
                         value={debinAmount}
                         onChange={(e) => setDebinAmount(e.target.value)}
                         fullWidth
-                        inputProps={{ min: 0, step: 0.01 }}
                         sx={{ mt: 2 }}
                     />
                     <FormControl fullWidth sx={{ mt: 2 }}>

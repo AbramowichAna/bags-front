@@ -22,7 +22,7 @@ describe('Login flow', () => {
         cy.get('input#email').type('wrong@example.com');
         cy.get('input#password').type('wrongpass');
         cy.get('button').contains('Sign in').click();
-        cy.contains('Error logging in').should('exist');
+        cy.contains('User does not exist or password is incorrect').should('exist');
     });
 
     it('should navigate to register page when clicking Create account link', () => {

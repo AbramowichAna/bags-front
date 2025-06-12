@@ -46,6 +46,6 @@ describe('Register Page', () => {
 
         cy.get('button').contains('Sign up').click();
 
-        cy.contains('Registration failed').should('be.visible');
+        cy.contains('User already exists').should('be.visible');
     });
 });

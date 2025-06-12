@@ -60,6 +60,17 @@ const TransferHistory: React.FC = () => {
         }
     };
 
+    const formatServiceType = (type: string) => {
+        switch (type) {
+            case 'BANK':
+                return 'Bank';
+            case 'VIRTUAL_WALLET':
+                return 'Virtual wallet';
+            default:
+                return type.toLowerCase();
+        }
+    };
+
     return (
         <Box mt={4}>
             <Typography variant="h5" gutterBottom>
@@ -88,7 +99,7 @@ const TransferHistory: React.FC = () => {
                                 <TableRow key={t.id}>
                                     <TableCell>{t.fromParticipant.email}</TableCell>
                                     <TableCell>{t.toParticipant.email}</TableCell>
-                                    <TableCell>{t.fromParticipant.serviceType}</TableCell>
+                                    <TableCell>{formatServiceType(t.fromParticipant.serviceType)}</TableCell>
                                     <TableCell>{t.fromParticipant.serviceName}</TableCell>
                                     <TableCell>$ {t.amount.toFixed(2)}</TableCell>
                                     <TableCell>{getDirectionLabel(t.type)}</TableCell>

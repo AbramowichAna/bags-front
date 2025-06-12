@@ -21,9 +21,9 @@ describe('Transfer History - E2E Test (Real Backend)', () => {
         cy.get('tbody tr').first().within(() => {
             cy.get('td').eq(0).invoke('text').should('not.be.empty');
             cy.get('td').eq(1).invoke('text').should('not.be.empty');
-            cy.get('td').eq(2).invoke('text').should('contain', '$');
-            cy.get('td').eq(3).invoke('text').should('match', /In|Out|External load/);
-            cy.get('td').eq(4).invoke('text').should('match', /\d{1,2}\/\d{1,2}\/\d{2,4}/);
+            cy.get('td').eq(4).invoke('text').should('contain', '$');
+            cy.get('td').eq(5).invoke('text').should('match', /In|Out|External load/);
+            cy.get('td').eq(6).invoke('text').should('match', /\d{1,2}\/\d{1,2}\/\d{2,4}/);
         });
     });
 
