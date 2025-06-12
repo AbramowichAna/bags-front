@@ -1,7 +1,7 @@
 export {};
 function generateUniqueEmail() {
     const timestamp = Date.now();
-    return `testuser+${timestamp}@example.com`;
+    return `alice@example.com`;
 }
 const uniqueEmail = generateUniqueEmail();
 describe('DEBIN Functionality - E2E Test (Real Backend)', () => {
