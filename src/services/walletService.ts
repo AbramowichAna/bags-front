@@ -12,6 +12,21 @@ export interface TransferRequest {
     amount: number;
 }
 
+export interface ParticipantDto {
+    serviceType: string,
+    serviceName: string,
+    email: string;
+}
+
+export interface TransferRecord {
+    id: string;
+    fromParticipant: ParticipantDto;
+    toParticipant: ParticipantDto;
+    timestamp: string;
+    amount: number;
+    type: 'IN' | 'OUT' | 'EXTERNAL_LOAD';
+}
+
 export interface TransferHistoryPage {
     content: TransferRecord[];
     totalElements: number;
@@ -20,13 +35,11 @@ export interface TransferHistoryPage {
     size: number;
 }
 
-export interface TransferRecord {
-    fromEmail: string;
-    toEmail: string;
+export interface DebInRequest {
+    externalServiceName: string;
+    serviceType: string;
+    externalEmail: string;
     amount: number;
-    timestamp: string;
-    transferNumber: string;
-    direction: 'IN' | 'OUT';
 }
 
 export async function getWalletInfo(): Promise<WalletInfo> {
@@ -60,4 +73,13 @@ export async function getTransferHistory(page = 0, size = 5): Promise<TransferHi
     });
 
     return response.data;
+}
+
+export async function requestDebIn(data: DebInRequest): Promise<void> {
+    const token = localStorage.getItem('token');
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
+
+    await post('/debin', data, { headers });
 }

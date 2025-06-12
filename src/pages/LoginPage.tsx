@@ -25,7 +25,11 @@ const LoginPage: React.FC = () => {
             await login(email, password);
             navigate('/wallet')
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Error logging in');
+            if (err.response?.status === 401) {
+                setError('User does not exist or password is incorrect');
+            } else {
+                setError(err.response?.data?.message || 'Error logging in');
+            }
         }
     };
 

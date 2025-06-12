@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getTransferHistory, TransferRecord } from '../../services/walletService';
 import {
     Typography,
     Box,
@@ -12,6 +11,7 @@ import {
     CircularProgress,
     Alert,
 } from '@mui/material';
+import { getTransferHistory, TransferRecord } from '../../services/walletService';
 
 const TransferHistory: React.FC = () => {
     const [transfers, setTransfers] = useState<TransferRecord[]>([]);
@@ -20,15 +20,12 @@ const TransferHistory: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const sizePerPage = 2;
+    const sizePerPage = 5;
 
     const fetchTransfers = async (pageNumber: number) => {
         setLoading(true);
         try {
             const data = await getTransferHistory(pageNumber - 1, sizePerPage);
-
-            console.log("Fetched Page:", data.number + 1);
-            console.log("Total Pages:", data.totalPages);
 
             setTransfers(data.content);
             setTotalPages(data.totalPages);
@@ -50,10 +47,34 @@ const TransferHistory: React.FC = () => {
         setCurrentPage(newPage);
     };
 
+    const getDirectionLabel = (type: TransferRecord['type']) => {
+        switch (type) {
+            case 'IN':
+                return 'In';
+            case 'OUT':
+                return 'Out';
+            case 'EXTERNAL_LOAD':
+                return 'External load';
+            default:
+                return type;
+        }
+    };
+
+    const formatServiceType = (type: string) => {
+        switch (type) {
+            case 'BANK':
+                return 'Bank';
+            case 'VIRTUAL_WALLET':
+                return 'Virtual wallet';
+            default:
+                return type.toLowerCase();
+        }
+    };
+
     return (
         <Box mt={4}>
             <Typography variant="h5" gutterBottom>
-                Transfer History
+                Movements
             </Typography>
 
             {loading && <CircularProgress />}
@@ -66,18 +87,22 @@ const TransferHistory: React.FC = () => {
                             <TableRow>
                                 <TableCell>From</TableCell>
                                 <TableCell>To</TableCell>
+                                <TableCell>Service Type</TableCell>
+                                <TableCell>Service Name</TableCell>
                                 <TableCell>Amount</TableCell>
                                 <TableCell>Direction</TableCell>
-                                <TableCell>Timestamp</TableCell>
+                                <TableCell>Date</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {transfers.map((t) => (
-                                <TableRow key={t.transferNumber}>
-                                    <TableCell>{t.fromEmail}</TableCell>
-                                    <TableCell>{t.toEmail}</TableCell>
-                                    <TableCell>$ {t.amount}</TableCell>
-                                    <TableCell>{t.direction}</TableCell>
+                                <TableRow key={t.id}>
+                                    <TableCell>{t.fromParticipant.email}</TableCell>
+                                    <TableCell>{t.toParticipant.email}</TableCell>
+                                    <TableCell>{formatServiceType(t.fromParticipant.serviceType)}</TableCell>
+                                    <TableCell>{t.fromParticipant.serviceName}</TableCell>
+                                    <TableCell>$ {t.amount.toFixed(2)}</TableCell>
+                                    <TableCell>{getDirectionLabel(t.type)}</TableCell>
                                     <TableCell>{new Date(t.timestamp).toLocaleString()}</TableCell>
                                 </TableRow>
                             ))}
@@ -101,5 +126,4 @@ const TransferHistory: React.FC = () => {
     );
 };
 
-// @ts-ignore
 export default TransferHistory;

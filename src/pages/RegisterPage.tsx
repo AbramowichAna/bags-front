@@ -44,10 +44,12 @@ const RegisterPage: React.FC = () => {
             await register(email, password);
             navigate('/login');
         } catch (error: any) {
-            if (error.response?.data?.message) {
-                setErrors({general: error.response.data.message});
+            if (error.response?.status === 409) {
+                setErrors({ general: 'User already exists' });
+            } else if (error.response?.data?.message) {
+                setErrors({ general: error.response.data.message });
             } else {
-                setErrors({general: 'Registration failed'});
+                setErrors({ general: 'Registration failed' });
             }
         }
     };

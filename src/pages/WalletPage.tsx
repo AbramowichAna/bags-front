@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {getWalletInfo, transfer, WalletInfo} from '../services/walletService';
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import {getWalletInfo, requestDebIn, transfer, WalletInfo} from '../services/walletService';
 import {
     Box,
     Typography,
@@ -25,6 +26,13 @@ const WalletPage: React.FC = () => {
     const [amount, setAmount] = useState('');
     const [formError, setFormError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
+    const [debinDialogOpen, setDebinDialogOpen] = useState(false);
+    const [debinRecipient, setDebinRecipient] = useState('');
+    const [debinAmount, setDebinAmount] = useState('');
+    const [debinFormError, setDebinFormError] = useState('');
+    const [debinServiceType, setDebinServiceType] = useState('');
+    const [debinServiceName, setDebinServiceName] = useState('');
 
 
     useEffect(() => {
@@ -71,6 +79,38 @@ const WalletPage: React.FC = () => {
         }
     };
 
+    const handleDebinRequest = async () => {
+        const numericAmount = parseFloat(debinAmount);
+        if (!debinRecipient || isNaN(numericAmount) || numericAmount <= 0) {
+            setDebinFormError('All fields are required and amount must be positive.');
+            return;
+        }
+
+        try {
+            await requestDebIn({
+                externalServiceName: debinServiceName,
+                serviceType: debinServiceType,
+                externalEmail: debinRecipient,
+                amount: numericAmount,
+            });
+
+            setSuccessMessage('Debin request sent!');
+            setDebinDialogOpen(false);
+            setDebinRecipient('');
+            setDebinAmount('');
+            setDebinFormError('');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (e: any) {
+            if (e.response && e.response.data) {
+                setDebinFormError((e.response.data as ApiErrorResponse).detail ?? e.response.data);
+            } else {
+                setDebinFormError('An unexpected error occurred.');
+            }
+        }
+    };
+
     if (loading) return <CircularProgress />;
     if (error) return <Alert severity="error">{error}</Alert>;
 
@@ -81,6 +121,13 @@ const WalletPage: React.FC = () => {
             <Typography variant="h6">Balance: $ {walletInfo?.balance?.amount} {walletInfo?.currency}</Typography>
             <Button variant="contained" color="primary" onClick={() => setDialogOpen(true)}>
                 Transfer
+            </Button>
+            <Button
+                variant="contained" color="primary"
+                sx={{ ml: 2 }}
+                onClick={() => setDebinDialogOpen(true)}
+            >
+                Debin
             </Button>
             {successMessage && (
                 <Alert severity="success" sx={{ mt: 2 }}>
@@ -95,6 +142,7 @@ const WalletPage: React.FC = () => {
                             value={recipient}
                             onChange={(e) => setRecipient(e.target.value)}
                             fullWidth
+                            sx={{ mt: 2 }}
                         />
                         <TextField
                             label="Amount"
@@ -102,7 +150,7 @@ const WalletPage: React.FC = () => {
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             fullWidth
-                            inputProps={{ min: 0, step: 0.01 }}
+                            sx={{ mt: 2 }}
                         />
                         {formError && <Alert severity="error">{formError}</Alert>}
                 </DialogContent>
@@ -113,6 +161,52 @@ const WalletPage: React.FC = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Dialog open={debinDialogOpen} onClose={() => setDebinDialogOpen(false)}>
+                <DialogTitle>Request Debin</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Recipient Email"
+                        value={debinRecipient}
+                        onChange={(e) => setDebinRecipient(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <TextField
+                        label="Amount"
+                        type="number"
+                        value={debinAmount}
+                        onChange={(e) => setDebinAmount(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                        <InputLabel id="service-type-label">Service Type</InputLabel>
+                        <Select
+                            labelId="service-type-label"
+                            value={debinServiceType}
+                            label="Service Type"
+                            onChange={(e) => setDebinServiceType(e.target.value)}
+                        >
+                            <MenuItem value="BANK">Bank</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField
+                        label="Service Name"
+                        value={debinServiceName}
+                        onChange={(e) => setDebinServiceName(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    {debinFormError && <Alert severity="error" sx={{ mt: 2 }}>{debinFormError}</Alert>}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDebinDialogOpen(false)}>Cancel</Button>
+                    <Button variant="contained" onClick={handleDebinRequest}>
+                        Request
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <TransferHistory/>
         </Box>
     );

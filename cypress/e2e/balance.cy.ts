@@ -3,8 +3,8 @@ export {};
 describe('Wallet Balance - E2E Test (Real Backend)', () => {
     beforeEach(() => {
         cy.visit('/login');
-        cy.get('input#email').type('aniabramowich2003@gmail.com');
-        cy.get('input#password').type('australwbl');
+        cy.get('input#email').type('test@example.com');
+        cy.get('input#password').type('password');
         cy.get('button').contains('Sign in').click();
     });
 
